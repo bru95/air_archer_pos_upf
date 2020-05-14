@@ -42,6 +42,9 @@ class GameLoop extends Game {
   void resize(Size size) {
     screenSize = size;
     tileSize = screenSize.height / 5;
+
+    print (screenSize);
+    print(tileSize);
   }
 
 

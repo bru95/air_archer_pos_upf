@@ -13,10 +13,17 @@ dependencies:
 
   cupertino_icons: ^0.1.2
   flame: ^0.20.2
+  shared_preferences: ^0.5.7+2
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: "^0.7.3"
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/icon/ic_launcher.png"
 
 
 flutter:

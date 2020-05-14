@@ -11,8 +11,8 @@ void main() async {
 
 
   Util flameUtil = Util();
-  await flameUtil.fullScreen();
   await flameUtil.setOrientation(DeviceOrientation.landscapeLeft);
+  await flameUtil.fullScreen();
 
   Flame.images.loadAll(<String>[
     'background/bg.png',
