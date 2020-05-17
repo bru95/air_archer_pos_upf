@@ -1,7 +1,7 @@
+import 'package:air_archer/gameLoop.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/util.dart';
 import 'package:flutter/services.dart';
-import 'package:air_archer/GameLoop.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flame/flame.dart';
 
@@ -16,7 +16,15 @@ void main() async {
 
   Flame.images.loadAll(<String>[
     'background/bg.png',
-    'archer/archer_flying1.png',
+    'archer/archer_shooting.png',
+    'archer/archer_moving1.png',
+    'archer/archer_moving2.png',
+    'archer_dead/archer_dead_1.png',
+    'archer_dead/archer_dead_2.png',
+    'archer_dead/archer_dead_3.png',
+    'archer_dead/archer_dead_4.png',
+    'archer_dead/archer_dead_5.png',
+    'archer_dead/archer_dead_6.png',
     'monster/monster_purple_angry1.png',
     'monster/monster_purple_angry2.png',
     'monster/monster_purple_hit1.png',
@@ -38,26 +46,20 @@ void main() async {
     'dead_effect/dead_3.png',
     'dead_effect/dead_4.png',
     'dead_effect/dead_5.png',
-    'dead_effect/dead_6.png',
-    'archer_dead/archer_dead_1.png',
-    'archer_dead/archer_dead_2.png',
-    'archer_dead/archer_dead_3.png',
-    'archer_dead/archer_dead_4.png',
-    'archer_dead/archer_dead_5.png',
-    'archer_dead/archer_dead_6.png'
+    'dead_effect/dead_6.png'
   ]);
 
-  GameLoop gameLoop = GameLoop();
+  gameLoop game = gameLoop();
 
-  runApp(gameLoop.widget);
+  runApp(game.widget);
 
   VerticalDragGestureRecognizer dragRecognizer = VerticalDragGestureRecognizer();
-  dragRecognizer.onStart = gameLoop.onStartVerticalDragArcher;
-  dragRecognizer.onUpdate = gameLoop.onVerticalDragArcher;
-  dragRecognizer.onEnd = gameLoop.onEndVerticalDragArcher;
+  dragRecognizer.onStart = game.onStartVerticalDragArcher;
+  dragRecognizer.onUpdate = game.onVerticalDragArcher;
+  dragRecognizer.onEnd = game.onEndVerticalDragArcher;
   flameUtil.addGestureRecognizer(dragRecognizer);
 
   TapGestureRecognizer tapper = TapGestureRecognizer();
-  tapper.onTapUp = gameLoop.shoot;
+  tapper.onTapUp = game.shoot;
   flameUtil.addGestureRecognizer(tapper);
 }

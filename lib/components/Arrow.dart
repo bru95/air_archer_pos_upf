@@ -1,10 +1,10 @@
 import 'dart:ui';
-import 'package:air_archer/GameLoop.dart';
+import 'package:air_archer/gameLoop.dart';
 import 'package:flame/sprite.dart';
 
 class Arrow {
 
-  final GameLoop game;
+  final gameLoop game;
 
   Rect arrowRect;
   Sprite arrow;

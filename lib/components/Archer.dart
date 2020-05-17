@@ -1,13 +1,13 @@
 import 'dart:ui';
-import 'package:air_archer/GameLoop.dart';
+import 'package:air_archer/gameLoop.dart';
 import 'package:flame/sprite.dart';
 
 class Archer {
 
-  final GameLoop game;
+  final gameLoop game;
 
   Rect archerRect;
-  List<Sprite> flyingSprite;
+  Sprite shootingSprite;
   List<Sprite> movingSprite;
   List<Sprite> deadSprite;
 
@@ -19,8 +19,7 @@ class Archer {
     double y = (game.screenSize.height / 2) - (game.tileSize / 2);
     archerRect = Rect.fromLTWH(0, y, game.tileSize * 2, game.tileSize * 2);
 
-    flyingSprite = List<Sprite>();
-    flyingSprite.add(Sprite("archer/archer_shooting4.png"));
+    shootingSprite = Sprite("archer/archer_shooting.png");
 
     movingSprite = List<Sprite>();
     movingSprite.add(Sprite("archer/archer_moving1.png"));
@@ -37,23 +36,19 @@ class Archer {
 
   void render(Canvas canvas) {
     if(!moving) {
-      flyingSprite[spriteIndex.toInt()].renderRect(canvas, archerRect);
-    }
-    else {
+      shootingSprite.renderRect(canvas, archerRect);
+    } else {
       movingSprite[spriteIndex.toInt()].renderRect(canvas, archerRect);
     }
   }
 
   void update(double time) {
-    int lengthArraySprite = 1;
     if(moving) {
-      lengthArraySprite = movingSprite.length;
+      spriteIndex += 15 * time;
+      spriteIndex = spriteIndex % movingSprite.length;
     } else {
-      lengthArraySprite = flyingSprite.length;
+      spriteIndex = 0;
     }
-
-    spriteIndex += 15 * time;
-    spriteIndex = spriteIndex % lengthArraySprite;
   }
 
   void startMove() {

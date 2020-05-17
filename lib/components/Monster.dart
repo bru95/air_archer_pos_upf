@@ -1,11 +1,11 @@
 import 'dart:math';
 import 'dart:ui';
-import 'package:air_archer/GameLoop.dart';
+import 'package:air_archer/gameLoop.dart';
 import 'package:flame/sprite.dart';
 
 class Monster {
 
-  final GameLoop game;
+  final gameLoop game;
 
   Rect monsterRect;
   List<Sprite> angrySprite;

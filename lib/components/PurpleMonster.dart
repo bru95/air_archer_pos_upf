@@ -1,12 +1,11 @@
-
-import 'package:air_archer/GameLoop.dart';
 import 'package:air_archer/components/Monster.dart';
+import 'package:air_archer/gameLoop.dart';
 import 'package:flame/sprite.dart';
 
 
 class PurpleMonster extends Monster {
 
-  PurpleMonster (GameLoop game) : super(game) {
+  PurpleMonster (gameLoop game) : super(game) {
     speed = game.tileSize * 1.5;
     life = 2; //mais dificil de matar
 

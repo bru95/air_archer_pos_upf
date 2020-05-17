@@ -12,20 +12,22 @@ import 'package:flame/flame.dart';
 import 'package:flutter/gestures.dart';
 
 
-class GameLoop extends Game {
+class gameLoop extends Game {
 
   Size screenSize;
   double tileSize;
+
+  //componentes
   Background background;
   Archer archer;
   List<Arrow> arrows;
   List<Monster> monsters;
 
-  GameLoop() {
+  gameLoop() {
     initialize();
   }
 
-  void initialize() async {
+  void initialize() async{
     resize(await Flame.util.initialDimensions());
 
     background = Background(this);
@@ -41,10 +43,7 @@ class GameLoop extends Game {
 
   void resize(Size size) {
     screenSize = size;
-    tileSize = screenSize.height / 5;
-
-    print (screenSize);
-    print(tileSize);
+    tileSize = screenSize.width / 9;
   }
 
 

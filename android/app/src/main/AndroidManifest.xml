@@ -10,6 +10,7 @@
         android:label="air_archer"
         android:icon="@mipmap/launcher_icon">
         <activity
+            android:screenOrientation="landscape"
             android:name=".MainActivity"
             android:launchMode="singleTop"
             android:theme="@style/LaunchTheme"
