@@ -8,6 +8,7 @@ class Monster {
   final gameLoop game;
 
   Rect monsterRect;
+  double deltaInflate;
   List<Sprite> angrySprite;
   List<Sprite> hitSprite;
   List<Sprite> deadSprite;
@@ -20,8 +21,12 @@ class Monster {
 
   Monster(this.game) {
     Random rnd = Random();
-    double y = rnd.nextDouble() * (game.screenSize.height - game.tileSize);
-    monsterRect = Rect.fromLTWH(game.screenSize.width, y, game.tileSize, game.tileSize);
+    deltaInflate = game.tileSize * 0.15; //quanto vai ser diminuido do tile para depois ser inflado
+    double y = rnd.nextDouble() * (game.screenSize.height - game.tileSize); // coordenada y aleatória
+    monsterRect = Rect.fromLTWH(game.screenSize.width + deltaInflate,
+                                y + deltaInflate,
+                                game.tileSize - (deltaInflate * 2),
+                                game.tileSize - (deltaInflate * 2));
 
     deadSprite = List<Sprite>();
     deadSprite.add(Sprite("dead_effect/dead_1.png"));
@@ -33,16 +38,18 @@ class Monster {
   }
 
   void restartPosition() {
-    monsterRect = Rect.fromLTWH(game.screenSize.width, monsterRect.top, game.tileSize, game.tileSize);
+    monsterRect = monsterRect.shift(Offset(game.screenSize.width, 0));
   }
 
   void render(Canvas canvas) {
+    //canvas.drawRect(monsterRect.inflate(deltaInflate), Paint()..color = Color(0x77ffffff));
+    //canvas.drawRect(monsterRect, Paint()..color = Color(0x88000000));
     if (isDead) {
-      deadSprite[spriteIndex.toInt()].renderRect(canvas, monsterRect);
+      deadSprite[spriteIndex.toInt()].renderRect(canvas, monsterRect.inflate(deltaInflate));
     } else if(life == 2){
-      angrySprite[spriteIndex.toInt()].renderRect(canvas, monsterRect);
+      angrySprite[spriteIndex.toInt()].renderRect(canvas, monsterRect.inflate(deltaInflate));
     } else if(life == 1){
-      hitSprite[spriteIndex.toInt()].renderRect(canvas, monsterRect);
+      hitSprite[spriteIndex.toInt()].renderRect(canvas, monsterRect.inflate(deltaInflate));
     }
   }
 

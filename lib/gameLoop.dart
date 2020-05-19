@@ -61,7 +61,7 @@ class gameLoop extends Game {
       arrow.update(time);
 
       monsters.forEach((monster) {
-        if (arrow.arrowRect.overlaps(monster.monsterRect) && !monster.isDead) {
+        if (arrow.hitRect.overlaps(monster.monsterRect) && !monster.isDead) {
           arrow.gone = true;
           monster.die();
         }
@@ -104,8 +104,9 @@ class gameLoop extends Game {
 
   void shoot(TapUpDetails details){
     if(!archer.moving) {
-      double y = (archer.archerRect.top + archer.archerRect.bottom) / 2;
-      arrows.add(Arrow(this, archer.archerRect.left + tileSize, y));
+      double x = archer.archerRect.left - archer.deltaInflate;
+      double y = archer.archerRect.top - archer.deltaInflate;
+      arrows.add(Arrow(this, x, y));
     }
   }
 

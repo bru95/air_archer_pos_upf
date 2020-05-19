@@ -7,6 +7,8 @@ class Archer {
   final gameLoop game;
 
   Rect archerRect;
+  double deltaInflate;
+
   Sprite shootingSprite;
   List<Sprite> movingSprite;
   List<Sprite> deadSprite;
@@ -16,8 +18,13 @@ class Archer {
   bool isDead = false;
 
   Archer(this.game) {
-    double y = (game.screenSize.height / 2) - (game.tileSize / 2);
-    archerRect = Rect.fromLTWH(0, y, game.tileSize * 2, game.tileSize * 2);
+    double size = game.tileSize * 1.20; //ocupar 20% a mais que o tamanho do tile
+    deltaInflate = size * 0.2;
+    double y = (game.screenSize.height / 2) - (size / 2); //iniciar no meio da tela
+    archerRect = Rect.fromLTWH(0 + deltaInflate,
+                                y + deltaInflate,
+                                size - (deltaInflate * 2),
+                                size - (deltaInflate * 2));
 
     shootingSprite = Sprite("archer/archer_shooting.png");
 
@@ -35,10 +42,12 @@ class Archer {
   }
 
   void render(Canvas canvas) {
+    //canvas.drawRect(archerRect.inflate(deltaInflate), Paint()..color = Color(0x77ffffff));
+    //canvas.drawRect(archerRect, Paint()..color = Color(0x88000000));
     if(!moving) {
-      shootingSprite.renderRect(canvas, archerRect);
+      shootingSprite.renderRect(canvas, archerRect.inflate(deltaInflate));
     } else {
-      movingSprite[spriteIndex.toInt()].renderRect(canvas, archerRect);
+      movingSprite[spriteIndex.toInt()].renderRect(canvas, archerRect.inflate(deltaInflate));
     }
   }
 
@@ -56,7 +65,17 @@ class Archer {
   }
 
   void onMove(Offset delta){
-    archerRect = archerRect.shift(delta);
+    if (delta.direction < 0) { //movendo pra cima
+      Offset target = Offset(archerRect.left, archerRect.top - deltaInflate) + delta;
+      if(target.dy >= 0) { //dentro da tela
+        archerRect = archerRect.shift(delta);
+      }
+    } else if(delta.direction > 0) { //movendo pra baixo
+      Offset target = Offset(archerRect.left, archerRect.bottom + deltaInflate) + delta;
+      if(target.dy <= game.screenSize.height) { //dentro da tela
+        archerRect = archerRect.shift(delta);
+      }
+    }
   }
 
   void stopMove(){
