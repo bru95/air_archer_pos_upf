@@ -17,7 +17,7 @@ class Arrow {
     double size = game.tileSize * 1.20;
     arrowRect = Rect.fromLTWH(x, y, size, size);
     hitRect = Rect.fromLTWH(arrowRect.left + (arrowRect.height * 0.5),
-                            arrowRect.top + (arrowRect.height * 0.35),
+                            arrowRect.top + (arrowRect.height * 0.36),
                             arrowRect.width * 0.5,
                             arrowRect.height * 0.15);
     arrow = Sprite("arrow/arrow.png");

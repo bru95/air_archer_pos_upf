@@ -21,7 +21,7 @@ class Monster {
 
   Monster(this.game) {
     Random rnd = Random();
-    deltaInflate = game.tileSize * 0.15; //quanto vai ser diminuido do tile para depois ser inflado
+    deltaInflate = game.tileSize * 0.18; //quanto vai ser diminuido do tile para depois ser inflado
     double y = rnd.nextDouble() * (game.screenSize.height - game.tileSize); // coordenada y aleatória
     monsterRect = Rect.fromLTWH(game.screenSize.width + deltaInflate,
                                 y + deltaInflate,
