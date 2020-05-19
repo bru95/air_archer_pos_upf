@@ -1,11 +1,11 @@
 import 'dart:math';
 import 'dart:ui';
-import 'package:air_archer/gameLoop.dart';
+import 'package:air_archer/GameLoop.dart';
 import 'package:flame/sprite.dart';
 
 class Monster {
 
-  final gameLoop game;
+  final GameLoop game;
 
   Rect monsterRect;
   double deltaInflate;
@@ -91,6 +91,7 @@ class Monster {
     if(life == 0) {
       spriteIndex = 0;
       isDead = true;
+      game.score += 1;
     }
   }
 

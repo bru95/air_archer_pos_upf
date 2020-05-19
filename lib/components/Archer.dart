@@ -1,10 +1,10 @@
 import 'dart:ui';
-import 'package:air_archer/gameLoop.dart';
+import 'package:air_archer/GameLoop.dart';
 import 'package:flame/sprite.dart';
 
 class Archer {
 
-  final gameLoop game;
+  final GameLoop game;
 
   Rect archerRect;
   double deltaInflate;

@@ -1,4 +1,4 @@
-import 'package:air_archer/gameLoop.dart';
+import 'package:air_archer/GameLoop.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/util.dart';
 import 'package:flutter/services.dart';
@@ -49,7 +49,7 @@ void main() async {
     'dead_effect/dead_6.png'
   ]);
 
-  gameLoop game = gameLoop();
+  GameLoop game = GameLoop();
 
   runApp(game.widget);
 

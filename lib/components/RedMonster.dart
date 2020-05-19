@@ -1,11 +1,11 @@
 import 'package:air_archer/components/Monster.dart';
-import 'package:air_archer/gameLoop.dart';
+import 'package:air_archer/GameLoop.dart';
 import 'package:flame/sprite.dart';
 
 
 class RedMonster extends Monster {
 
-  RedMonster (gameLoop game) : super(game) {
+  RedMonster (GameLoop game) : super(game) {
     speed = game.tileSize;
 
     angrySprite = List<Sprite>();

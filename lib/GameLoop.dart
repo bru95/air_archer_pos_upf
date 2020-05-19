@@ -7,12 +7,13 @@ import 'package:air_archer/components/HardMonster.dart';
 import 'package:air_archer/components/Monster.dart';
 import 'package:air_archer/components/PurpleMonster.dart';
 import 'package:air_archer/components/RedMonster.dart';
+import 'package:air_archer/components/Score.dart';
 import 'package:flame/game.dart';
 import 'package:flame/flame.dart';
 import 'package:flutter/gestures.dart';
 
 
-class gameLoop extends Game {
+class GameLoop extends Game {
 
   Size screenSize;
   double tileSize;
@@ -22,18 +23,24 @@ class gameLoop extends Game {
   Archer archer;
   List<Arrow> arrows;
   List<Monster> monsters;
+  Score scoreDisplay;
 
-  gameLoop() {
+  int score;
+
+  GameLoop() {
     initialize();
   }
 
   void initialize() async{
     resize(await Flame.util.initialDimensions());
 
+    score = 0;
+
     background = Background(this);
     archer = Archer(this);
     monsters = List<Monster>();
     arrows = List<Arrow>();
+    scoreDisplay = Score(this);
 
     //USAR UMA LOGICA PARA DISPARO DOS MONSTROS
     monsters.add(RedMonster(this));
@@ -70,6 +77,8 @@ class gameLoop extends Game {
     arrows.removeWhere((arrow) {
       return arrow.gone;
     });
+
+    scoreDisplay.update(time);
   }
 
   void render(Canvas canvas) {
@@ -84,6 +93,8 @@ class gameLoop extends Game {
     monsters.forEach((monster) {
       monster.render(canvas);
     });
+
+    scoreDisplay.render(canvas);
   }
 
   void onStartVerticalDragArcher(DragStartDetails details) {
