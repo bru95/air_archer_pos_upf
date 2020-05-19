@@ -50,7 +50,7 @@ class GameLoop extends Game {
 
   void resize(Size size) {
     screenSize = size;
-    tileSize = screenSize.width / 9;
+    tileSize = screenSize.height / 5;
   }
 
 
@@ -59,6 +59,9 @@ class GameLoop extends Game {
 
     monsters.forEach((monster) {
       monster.update(time);
+      if(monster.monsterRect.overlaps(archer.archerRect) && !monster.isDead) {
+        archer.die();
+      }
     });
     monsters.removeWhere((monster) {
       return monster.gone;
@@ -114,7 +117,7 @@ class GameLoop extends Game {
   }
 
   void shoot(TapUpDetails details){
-    if(!archer.moving) {
+    if(!archer.moving && !archer.isDead) {
       double x = archer.archerRect.left - archer.deltaInflate;
       double y = archer.archerRect.top - archer.deltaInflate;
       arrows.add(Arrow(this, x, y));

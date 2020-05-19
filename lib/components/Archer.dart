@@ -44,24 +44,49 @@ class Archer {
   void render(Canvas canvas) {
     //canvas.drawRect(archerRect.inflate(deltaInflate), Paint()..color = Color(0x77ffffff));
     //canvas.drawRect(archerRect, Paint()..color = Color(0x88000000));
-    if(!moving) {
-      shootingSprite.renderRect(canvas, archerRect.inflate(deltaInflate));
+    if(!isDead) {
+      if (!moving) {
+        shootingSprite.renderRect(canvas, archerRect.inflate(deltaInflate));
+      } else {
+        movingSprite[spriteIndex.toInt()].renderRect(canvas, archerRect.inflate(deltaInflate));
+      }
     } else {
-      movingSprite[spriteIndex.toInt()].renderRect(canvas, archerRect.inflate(deltaInflate));
+      deadSprite[spriteIndex.toInt()].renderRect(canvas, archerRect.inflate(deltaInflate));
     }
   }
 
   void update(double time) {
-    if(moving) {
-      spriteIndex += 15 * time;
-      spriteIndex = spriteIndex % movingSprite.length;
+    if(!isDead) {
+      if (moving) {
+        spriteIndex += 15 * time;
+        spriteIndex = spriteIndex % movingSprite.length;
+      } else {
+        spriteIndex = 0;
+      }
     } else {
-      spriteIndex = 0;
+      if(spriteIndex.toInt() >= 3) { //começa a cair
+        double stepDistance = game.tileSize * time;
+        Offset targetLocation = Offset(archerRect.left + deltaInflate, game.screenSize.height);
+        Offset toTarget = targetLocation - Offset(archerRect.left + deltaInflate, archerRect.bottom + deltaInflate);
+        if (stepDistance < toTarget.distance) {
+          Offset stepToTarget = Offset.fromDirection(toTarget.direction, stepDistance);
+          archerRect = archerRect.shift(stepToTarget);
+        } else {
+          if(spriteIndex < deadSprite.length - 1) {
+            spriteIndex += 8 * time;
+            spriteIndex = spriteIndex % deadSprite.length;
+          }
+          archerRect = archerRect.shift(toTarget);
+        }
+      } else {
+        spriteIndex += 8 * time;
+        spriteIndex = spriteIndex % deadSprite.length;
+      }
     }
   }
 
   void startMove() {
-    moving = true;
+    if (!isDead) moving = true;
   }
 
   void onMove(Offset delta){
@@ -80,6 +105,13 @@ class Archer {
 
   void stopMove(){
     moving = false;
+  }
+
+  void die() {
+    if(!isDead) {
+      spriteIndex = 0;
+      isDead = true;
+    }
   }
 
 }
