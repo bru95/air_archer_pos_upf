@@ -13,18 +13,13 @@ class Archer {
   List<Sprite> movingSprite;
   List<Sprite> deadSprite;
 
-  double spriteIndex = 0;
-  bool moving = false;
-  bool isDead = false;
+  double spriteIndex;
+  bool moving;
+  bool isDead;
+  bool gone;
 
   Archer(this.game) {
-    double size = game.tileSize * 1.20; //ocupar 20% a mais que o tamanho do tile
-    deltaInflate = size * 0.2;
-    double y = (game.screenSize.height / 2) - (size / 2); //iniciar no meio da tela
-    archerRect = Rect.fromLTWH(0 + deltaInflate,
-                                y + deltaInflate,
-                                size - (deltaInflate * 2),
-                                size - (deltaInflate * 2));
+    initialize();
 
     shootingSprite = Sprite("archer/archer_shooting.png");
 
@@ -39,6 +34,21 @@ class Archer {
     deadSprite.add(Sprite("archer_dead/archer_dead_4.png"));
     deadSprite.add(Sprite("archer_dead/archer_dead_5.png"));
     deadSprite.add(Sprite("archer_dead/archer_dead_6.png"));
+  }
+
+  void initialize() {
+    spriteIndex = 0;
+    moving = false;
+    isDead = false;
+    gone = false;
+
+    double size = game.tileSize * 1.20; //ocupar 20% a mais que o tamanho do tile
+    deltaInflate = size * 0.2;
+    double y = (game.screenSize.height / 2) - (size / 2); //iniciar no meio da tela
+    archerRect = Rect.fromLTWH(0 + deltaInflate,
+        y + deltaInflate,
+        size - (deltaInflate * 2),
+        size - (deltaInflate * 2));
   }
 
   void render(Canvas canvas) {
@@ -72,11 +82,13 @@ class Archer {
           Offset stepToTarget = Offset.fromDirection(toTarget.direction, stepDistance);
           archerRect = archerRect.shift(stepToTarget);
         } else {
-          if(spriteIndex < deadSprite.length - 1) {
-            spriteIndex += 8 * time;
-            spriteIndex = spriteIndex % deadSprite.length;
-          }
+          spriteIndex += 8 * time;
+          spriteIndex = spriteIndex % deadSprite.length + 1;
           archerRect = archerRect.shift(toTarget);
+          if (spriteIndex >= deadSprite.length) {
+            gone = true;
+            spriteIndex = (deadSprite.length - 1).toDouble();
+          }
         }
       } else {
         spriteIndex += 8 * time;

@@ -11,8 +11,8 @@ void main() async {
 
 
   Util flameUtil = Util();
-  await flameUtil.setOrientation(DeviceOrientation.landscapeLeft);
   await flameUtil.fullScreen();
+  await flameUtil.setOrientation(DeviceOrientation.landscapeLeft);
 
   Flame.images.loadAll(<String>[
     'background/bg.png',
@@ -46,7 +46,9 @@ void main() async {
     'dead_effect/dead_3.png',
     'dead_effect/dead_4.png',
     'dead_effect/dead_5.png',
-    'dead_effect/dead_6.png'
+    'dead_effect/dead_6.png',
+    'archer/archer_lost.png',
+    'controllers/home.png'
   ]);
 
   GameLoop game = GameLoop();
@@ -60,6 +62,6 @@ void main() async {
   flameUtil.addGestureRecognizer(dragRecognizer);
 
   TapGestureRecognizer tapper = TapGestureRecognizer();
-  tapper.onTapUp = game.shoot;
+  tapper.onTapUp = game.archerShoot;
   flameUtil.addGestureRecognizer(tapper);
 }
