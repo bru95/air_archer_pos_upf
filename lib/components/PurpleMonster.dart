@@ -7,6 +7,7 @@ class PurpleMonster extends Monster {
 
   PurpleMonster (GameLoop game) : super(game) {
     speed = game.tileSize * 1.5;
+    audio_death = 'death_monster2.wav';
     life = 2; //mais dificil de matar
 
     angrySprite = List<Sprite>();

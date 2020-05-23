@@ -11,6 +11,7 @@ import 'package:air_archer/components/Monster.dart';
 import 'package:air_archer/components/PurpleMonster.dart';
 import 'package:air_archer/components/RedMonster.dart';
 import 'package:air_archer/components/Score.dart';
+import 'package:flame/flame.dart';
 import 'package:flutter/gestures.dart';
 
 class Playing {
@@ -93,6 +94,7 @@ class Playing {
 
   void endGame() {
     archer.die();
+    Flame.audio.play('round_end.wav');
   }
 
   void addMonster(double time) {

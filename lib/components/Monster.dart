@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'dart:ui';
 import 'package:air_archer/GameLoop.dart';
+import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 
 class Monster {
@@ -12,6 +13,7 @@ class Monster {
   List<Sprite> angrySprite;
   List<Sprite> hitSprite;
   List<Sprite> deadSprite;
+  String audio_death;
 
   double speed; //quanto o monstro anda em 1 segundo
   int life = 1;
@@ -91,6 +93,7 @@ class Monster {
     if(life == 0) {
       spriteIndex = 0;
       isDead = true;
+      Flame.audio.play(audio_death, volume: 1.5);
       return true;
     }
     return false;
