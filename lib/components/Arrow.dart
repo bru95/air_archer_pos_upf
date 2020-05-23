@@ -21,7 +21,7 @@ class Arrow {
                             arrowRect.width * 0.5,
                             arrowRect.height * 0.15);
     arrow = Sprite("arrow/arrow.png");
-    speed = game.tileSize * 3;
+    speed = game.tileSize * 4;
   }
 
   void render(Canvas canvas) {

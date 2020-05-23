@@ -1,8 +1,12 @@
+import 'dart:math';
 import 'dart:ui';
 import 'package:air_archer/GameLoop.dart';
 import 'package:air_archer/View.dart';
 import 'package:air_archer/components/Archer.dart';
 import 'package:air_archer/components/Arrow.dart';
+import 'package:air_archer/components/Bird.dart';
+import 'package:air_archer/components/HardMonster.dart';
+import 'package:air_archer/components/HighScoreDisplay.dart';
 import 'package:air_archer/components/Monster.dart';
 import 'package:air_archer/components/PurpleMonster.dart';
 import 'package:air_archer/components/RedMonster.dart';
@@ -15,16 +19,19 @@ class Playing {
   Archer archer;
   List<Arrow> arrows;
   List<Monster> monsters;
+  List<Bird> birds;
   Score scoreDisplay;
 
-  int maxInterval = 2000;
+  int maxInterval = 3000;
   int nextSpawn;
-
+  Random rnd;
 
   Playing(this.game) {
+    rnd = Random();
     archer = Archer(game);
     monsters = List<Monster>();
     arrows = List<Arrow>();
+    birds = List<Bird>();
     scoreDisplay = Score(game);
   }
 
@@ -37,15 +44,19 @@ class Playing {
   }
 
   void update(double time) {
-    addMonster();
+    addMonster(time);
 
     archer.update(time);
     if (archer.gone) game.activeView = View.lost;
 
+    birds.forEach((bird) {
+      bird.update(time);
+    });
+
     monsters.forEach((monster) {
       monster.update(time);
       if (monster.monsterRect.overlaps(archer.archerRect) && !monster.isDead) {
-        archer.die();
+        endGame();
       }
     });
     monsters.removeWhere((monster) {
@@ -58,7 +69,18 @@ class Playing {
       monsters.forEach((monster) {
         if (arrow.hitRect.overlaps(monster.monsterRect) && !monster.isDead) {
           arrow.gone = true;
-          monster.die();
+          bool died = monster.die();
+          if(died) {
+            game.score += 1;
+            game.updateHighScore();
+          }
+        }
+      });
+
+      birds.forEach((bird) {
+        if(arrow.hitRect.overlaps(bird.birdRect)) {
+          arrow.gone = true;
+          endGame();
         }
       });
     });
@@ -69,16 +91,31 @@ class Playing {
     scoreDisplay.update(time);
   }
 
-  void addMonster() {
+  void endGame() {
+    archer.die();
+  }
+
+  void addMonster(double time) {
     int nowTimestamp = DateTime.now().millisecondsSinceEpoch;
-    if (nowTimestamp >= nextSpawn) {
-      if(game.score >= 3) {
-        monsters.add(PurpleMonster(game));
-      } else {
-        monsters.add(RedMonster(game));
+    if (nowTimestamp >= nextSpawn && !archer.gone) {
+      switch(rnd.nextInt(5)) {
+        case(0):
+          monsters.add(RedMonster(game));
+          break;
+        case(1):
+          monsters.add(PurpleMonster(game));
+          break;
+        case(2):
+          monsters.add(HardMonster(game));
+          break;
+        case(3):
+          birds.add(Bird(game));
+          break;
+
       }
       nextSpawn = nowTimestamp + maxInterval;
     }
+
   }
 
   void render(Canvas canvas) {
@@ -86,6 +123,10 @@ class Playing {
 
     arrows.forEach((arrow) {
       arrow.render(canvas);
+    });
+
+    birds.forEach((bird) {
+      bird.render(canvas);
     });
 
     monsters.forEach((monster) {
@@ -97,9 +138,7 @@ class Playing {
 
 
   void startMoveArcher(DragStartDetails details) {
-    if(archer.archerRect.contains(details.globalPosition)) {
-      archer.startMove();
-    }
+    archer.startMove();
   }
 
   void moveArcher(DragUpdateDetails details) {

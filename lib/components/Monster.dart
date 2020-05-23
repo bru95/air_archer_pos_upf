@@ -86,13 +86,14 @@ class Monster {
     }
   }
 
-  void die() {
+  bool die() {
     life = life - 1;
     if(life == 0) {
       spriteIndex = 0;
       isDead = true;
-      game.score += 1;
+      return true;
     }
+    return false;
   }
 
 }

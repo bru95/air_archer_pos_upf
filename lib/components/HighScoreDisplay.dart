@@ -2,15 +2,14 @@ import 'dart:ui';
 import 'package:air_archer/GameLoop.dart';
 import 'package:flutter/painting.dart';
 
-class Score {
+class HighScoreDisplay {
 
   final GameLoop game;
-
   TextPainter painter;
   TextStyle textStyle;
   Offset position;
 
-  Score(this.game) {
+  HighScoreDisplay(this.game) {
     painter = TextPainter(
       textAlign: TextAlign.left,
       textDirection: TextDirection.ltr,
@@ -20,6 +19,7 @@ class Score {
       fontFamily: 'Cabin_Sketch',
       color: Color(0xffffffff),
       fontSize: 20,
+      fontWeight: FontWeight.bold,
       shadows: <Shadow>[
         Shadow(
           blurRadius: 7,
@@ -30,20 +30,24 @@ class Score {
     );
 
     position = Offset.zero;
+
+    update();
   }
 
   void render(Canvas c) {
     painter.paint(c, position);
   }
 
-  void update(double t) {
-    if ((painter.text?.text ?? '') != game.score.toString()) {
-      painter.text = TextSpan(
-        text: " Score: ${game.score.toString()}",
-        style: textStyle,
-      );
+  void update() {
+    int highscore = game.storage.getInt('highscore') ?? 0;
 
-      painter.layout();
-    }
+    painter.text = TextSpan(
+      text: 'High-score: ' + highscore.toString(),
+      style: textStyle,
+    );
+
+    painter.layout();
+
+    position = Offset(game.screenSize.width - (painter.width), 0);
   }
 }

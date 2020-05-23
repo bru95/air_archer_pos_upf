@@ -4,6 +4,7 @@ import 'package:flame/util.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flame/flame.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
 
@@ -51,7 +52,8 @@ void main() async {
     'controllers/home.png'
   ]);
 
-  GameLoop game = GameLoop();
+  SharedPreferences storage = await SharedPreferences.getInstance();
+  GameLoop game = GameLoop(storage);
 
   runApp(game.widget);
 

@@ -2,12 +2,14 @@ import 'dart:ui';
 
 import 'package:air_archer/View.dart';
 import 'package:air_archer/components/Background.dart';
+import 'package:air_archer/components/HighScoreDisplay.dart';
 import 'package:air_archer/view/Home.dart';
 import 'package:air_archer/view/Lost.dart';
 import 'package:air_archer/view/Playing.dart';
 import 'package:flame/game.dart';
 import 'package:flame/flame.dart';
 import 'package:flutter/gestures.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class GameLoop extends Game {
@@ -18,6 +20,9 @@ class GameLoop extends Game {
   double tileSize;
 
   Background background;
+  HighScoreDisplay highScore;
+
+  final SharedPreferences storage;
 
   //VIEWS
   Home homeView;
@@ -27,7 +32,7 @@ class GameLoop extends Game {
   int score;
 
 
-  GameLoop() {
+  GameLoop(this.storage) {
     initialize();
   }
 
@@ -41,6 +46,7 @@ class GameLoop extends Game {
     homeView = Home(this);
     playingView = Playing(this);
     lostView = Lost(this);
+    highScore = HighScoreDisplay(this);
   }
 
   void resize(Size size) {
@@ -69,6 +75,8 @@ class GameLoop extends Game {
     } else if (activeView == View.lost) {
       lostView.render(canvas);
     }
+
+    highScore.render(canvas);
   }
 
 
@@ -91,6 +99,13 @@ class GameLoop extends Game {
       activeView = View.playing;
     } else {
       playingView.shoot(details);
+    }
+  }
+
+  void updateHighScore() {
+    if (score > (storage.getInt('highscore') ?? 0)) {
+      storage.setInt('highscore', score);
+      highScore.update();
     }
   }
 

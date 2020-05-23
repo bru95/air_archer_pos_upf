@@ -38,3 +38,12 @@ flutter:
     - assets/images/archer_dead/
     - assets/images/controllers/
     - assets/images/bird/
+
+  fonts:
+    - family: Cabin_Sketch
+      fonts:
+        - asset: fonts/CabinSketch-Regular.ttf
+        - asset: fonts/CabinSketch-Bold.ttf
+    - family: Lobster
+      fonts:
+        - asset: fonts/Lobster-Regular.ttf

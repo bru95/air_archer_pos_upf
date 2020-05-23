@@ -12,13 +12,15 @@ class Bird {
   Offset targetLocation;
 
   double speed;
+  double deltaInflate;
   bool gone = false;
   double spriteIndex = 0;
 
   Bird(this.game) {
-    double size = game.tileSize;
+    double size = game.tileSize * 1.2;
+    deltaInflate = size * 0.3;
     double x = (game.tileSize * 2);
-    birdRect = Rect.fromLTWH(x, game.screenSize.height, size, size);
+    birdRect = Rect.fromLTWH(x, game.screenSize.height, size - (deltaInflate * 2), size - (deltaInflate * 2));
     birdSprites = List<Sprite>();
     birdSprites.add(Sprite("bird/bird_1.png"));
     birdSprites.add(Sprite("bird/bird_2.png"));
@@ -32,7 +34,9 @@ class Bird {
   }
 
   void render(Canvas canvas) {
-    birdSprites[spriteIndex.toInt()].renderRect(canvas, birdRect);
+    //canvas.drawRect(birdRect.inflate(deltaInflate), Paint()..color = Color(0x77ffffff));
+    //canvas.drawRect(birdRect, Paint()..color = Color(0x88000000));
+    birdSprites[spriteIndex.toInt()].renderRect(canvas, birdRect.inflate(deltaInflate));
   }
 
   void update(double time) {

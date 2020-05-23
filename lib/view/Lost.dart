@@ -26,8 +26,9 @@ class Lost {
     );
 
     textStyle = TextStyle(
+      fontFamily: 'Lobster',
       color: Color(0xffffffff),
-      fontSize: 90,
+      fontSize: 70,
       shadows: <Shadow>[
         Shadow(
           blurRadius: 7,
