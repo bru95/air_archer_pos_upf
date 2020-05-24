@@ -11,6 +11,7 @@ import 'package:air_archer/components/Monster.dart';
 import 'package:air_archer/components/PurpleMonster.dart';
 import 'package:air_archer/components/RedMonster.dart';
 import 'package:air_archer/components/Score.dart';
+import 'package:air_archer/components/SoundButton.dart';
 import 'package:flame/flame.dart';
 import 'package:flutter/gestures.dart';
 
@@ -22,6 +23,7 @@ class Playing {
   List<Monster> monsters;
   List<Bird> birds;
   Score scoreDisplay;
+  SoundButton soundButton;
 
   int maxInterval = 3000;
   int nextSpawn;
@@ -34,6 +36,7 @@ class Playing {
     arrows = List<Arrow>();
     birds = List<Bird>();
     scoreDisplay = Score(game);
+    soundButton = SoundButton(game);
   }
 
   void start() {
@@ -72,6 +75,9 @@ class Playing {
           arrow.gone = true;
           bool died = monster.die();
           if(died) {
+            if(soundButton.enable) {
+              Flame.audio.play(monster.audio_death, volume: 1.5);
+            }
             game.score += 1;
             game.updateHighScore();
           }
@@ -94,7 +100,9 @@ class Playing {
 
   void endGame() {
     archer.die();
-    Flame.audio.play('round_end.wav');
+    if(soundButton.enable) {
+      Flame.audio.play('round_end.wav');
+    }
   }
 
   void addMonster(double time) {
@@ -136,6 +144,8 @@ class Playing {
     });
 
     scoreDisplay.render(canvas);
+
+    soundButton.render(canvas);
   }
 
 
@@ -153,7 +163,15 @@ class Playing {
     archer.stopMove();
   }
 
-  void shoot(TapUpDetails details){
+  void onTapUp(TapUpDetails details) {
+    if(soundButton.rect.contains(details.globalPosition)) {
+      soundButton.change();
+    } else {
+      shoot();
+    }
+  }
+
+  void shoot(){
     if(!archer.moving && !archer.isDead) {
       double x = archer.archerRect.left - archer.deltaInflate;
       double y = archer.archerRect.top - archer.deltaInflate;

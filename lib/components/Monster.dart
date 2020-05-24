@@ -93,7 +93,6 @@ class Monster {
     if(life == 0) {
       spriteIndex = 0;
       isDead = true;
-      Flame.audio.play(audio_death, volume: 1.5);
       return true;
     }
     return false;

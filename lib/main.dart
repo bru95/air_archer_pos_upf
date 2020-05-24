@@ -49,7 +49,18 @@ void main() async {
     'dead_effect/dead_5.png',
     'dead_effect/dead_6.png',
     'archer/archer_lost.png',
-    'controllers/home.png'
+    'controllers/home.png',
+    'ui/icon-sound-disabled.png',
+    'ui/icon-sound-enabled.png'
+  ]);
+
+  Flame.audio.disableLog();
+  Flame.audio.loadAll(<String>[
+    'death_monster1.wav',
+    'death_monster3.wav',
+    'death_monster3.wav',
+    'end_game.wav',
+    'round_end.wav'
   ]);
 
   SharedPreferences storage = await SharedPreferences.getInstance();
@@ -64,6 +75,6 @@ void main() async {
   flameUtil.addGestureRecognizer(dragRecognizer);
 
   TapGestureRecognizer tapper = TapGestureRecognizer();
-  tapper.onTapUp = game.archerShoot;
+  tapper.onTapUp = game.onTapUp;
   flameUtil.addGestureRecognizer(tapper);
 }

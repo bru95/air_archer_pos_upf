@@ -38,6 +38,7 @@ flutter:
     - assets/images/archer_dead/
     - assets/images/controllers/
     - assets/images/bird/
+    - assets/images/ui/
     - assets/audio/
 
   fonts:

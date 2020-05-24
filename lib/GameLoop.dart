@@ -92,13 +92,13 @@ class GameLoop extends Game {
     playingView.stopMoveArcher(details);
   }
 
-  void archerShoot(TapUpDetails details){
+  void onTapUp(TapUpDetails details){
     if(activeView == View.home || activeView == View.lost) {
       score = 0;
       playingView.start();
       activeView = View.playing;
     } else {
-      playingView.shoot(details);
+      playingView.onTapUp(details);
     }
   }
 
