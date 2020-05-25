@@ -14,7 +14,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class GameLoop extends Game {
 
-  View activeView = View.home;
+  View activeView;
 
   Size screenSize;
   double tileSize;
@@ -47,6 +47,8 @@ class GameLoop extends Game {
     playingView = Playing(this);
     lostView = Lost(this);
     highScore = HighScoreDisplay(this);
+
+    setHomeView();
   }
 
   void resize(Size size) {
@@ -54,14 +56,24 @@ class GameLoop extends Game {
     tileSize = screenSize.height / 5;
   }
 
+  void setHomeView() {
+    activeView = View.home;
+    homeView.start();
+  }
+
+  void setPlayingView() {
+    activeView = View.playing;
+  }
+
+  void setLostView() {
+    activeView = View.lost;
+    lostView.start();
+  }
+
 
   void update (double time) {
-    if (activeView == View.home) {
-      homeView.update(time);
-    } else if (activeView == View.playing) {
+    if (activeView == View.playing) {
       playingView.update(time);
-    } else if (activeView == View.lost) {
-      lostView.update(time);
     }
   }
 
@@ -96,7 +108,7 @@ class GameLoop extends Game {
     if(activeView == View.home || activeView == View.lost) {
       score = 0;
       playingView.start();
-      activeView = View.playing;
+      setPlayingView();
     } else {
       playingView.onTapUp(details);
     }

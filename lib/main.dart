@@ -1,3 +1,4 @@
+import 'package:air_archer/BGM.dart';
 import 'package:air_archer/GameLoop.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/util.dart';
@@ -56,17 +57,21 @@ void main() async {
 
   Flame.audio.disableLog();
   Flame.audio.loadAll(<String>[
-    'death_monster1.wav',
-    'death_monster3.wav',
-    'death_monster3.wav',
-    'end_game.wav',
-    'round_end.wav'
+    'death_monster1.mp3',
+    'death_monster3.mp3',
+    'death_monster3.mp3',
+    'end_game.mp3',
+    'round_end.mp3'
   ]);
+
+  await BGM.add('game_stoped.mp3');
 
   SharedPreferences storage = await SharedPreferences.getInstance();
   GameLoop game = GameLoop(storage);
 
   runApp(game.widget);
+
+  BGM.attachWidgetBindingListener();
 
   VerticalDragGestureRecognizer dragRecognizer = VerticalDragGestureRecognizer();
   dragRecognizer.onStart = game.onStartVerticalDragArcher;

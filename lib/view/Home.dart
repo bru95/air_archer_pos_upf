@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:air_archer/BGM.dart';
 import 'package:air_archer/GameLoop.dart';
 import 'package:flame/sprite.dart';
 
@@ -21,6 +22,7 @@ class Home {
     sprite.renderRect(canvas, rect);
   }
 
-  void update(double time) {
+  void start() {
+    BGM.play(0);
   }
 }

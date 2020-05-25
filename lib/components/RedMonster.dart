@@ -7,7 +7,7 @@ class RedMonster extends Monster {
 
   RedMonster (GameLoop game) : super(game) {
     speed = game.tileSize;
-    audio_death = 'death_monster1.wav';
+    audio_death = 'death_monster1.mp3';
 
     angrySprite = List<Sprite>();
     angrySprite.add(Sprite("monster/monster_red_angry1.png"));

@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:air_archer/BGM.dart';
 import 'package:air_archer/GameLoop.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/painting.dart';
@@ -56,7 +57,7 @@ class Lost {
     archerLost.renderRect(canvas, archerLostRect);
   }
 
-  void update(double time) {
-
+  void start() {
+    BGM.play(0);
   }
 }

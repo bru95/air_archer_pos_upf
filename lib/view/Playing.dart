@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'dart:ui';
+import 'package:air_archer/BGM.dart';
 import 'package:air_archer/GameLoop.dart';
 import 'package:air_archer/View.dart';
 import 'package:air_archer/components/Archer.dart';
@@ -45,13 +46,18 @@ class Playing {
     arrows.clear();
 
     nextSpawn = DateTime.now().millisecondsSinceEpoch + maxInterval;
+    temp();
+  }
+
+  void temp() async {
+    await BGM.stop();
   }
 
   void update(double time) {
     addMonster(time);
 
     archer.update(time);
-    if (archer.gone) game.activeView = View.lost;
+    if (archer.gone) game.setLostView();
 
     birds.forEach((bird) {
       bird.update(time);
@@ -76,7 +82,7 @@ class Playing {
           bool died = monster.die();
           if(died) {
             if(soundButton.enable) {
-              Flame.audio.play(monster.audio_death, volume: 1.5);
+              Flame.audio.audioCache.play(monster.audio_death, volume: 1.5);
             }
             game.score += 1;
             game.updateHighScore();
@@ -101,7 +107,7 @@ class Playing {
   void endGame() {
     archer.die();
     if(soundButton.enable) {
-      Flame.audio.play('round_end.wav');
+      Flame.audio.audioCache.play('end_game.mp3');
     }
   }
 

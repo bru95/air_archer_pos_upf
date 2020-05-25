@@ -8,7 +8,7 @@ class HardMonster extends Monster {
 
   HardMonster (GameLoop game) : super(game) {
     speed = game.tileSize * 2.5;
-    audio_death = 'death_monster3.wav';
+    audio_death = 'death_monster3.mp3';
     life = 2; //mais dificil de matar
 
     angrySprite = List<Sprite>();
