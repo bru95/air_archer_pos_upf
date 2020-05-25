@@ -30,8 +30,9 @@ class SoundButton {
     }
   }
 
-  void change() {
+  bool change() {
     enable = !enable;
+    return enable;
   }
 
 }

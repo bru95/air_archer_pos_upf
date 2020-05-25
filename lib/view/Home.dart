@@ -23,6 +23,6 @@ class Home {
   }
 
   void start() {
-    BGM.play(0);
+    BGM.play(0, game.soundButton.enable, vol: 0.5);
   }
 }

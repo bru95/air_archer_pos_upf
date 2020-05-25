@@ -56,7 +56,7 @@ class BGM {
     _tracks.clear();
   }
 
-  static Future play(int trackIndex) async {
+  static Future play(int trackIndex, bool startMusic, {double vol = 1.0}) async {
     if (_currentTrack == trackIndex) {
       if (_isPlaying) {
         return;
@@ -71,9 +71,9 @@ class BGM {
     }
 
     _currentTrack = trackIndex;
-    _isPlaying = true;
+    _isPlaying = startMusic;
     AudioCache t = _tracks[_currentTrack];
-    await t.loop(t.loadedFiles.keys.first);
+    await t.loop(t.loadedFiles.keys.first, volume: vol);
     _update();
   }
 

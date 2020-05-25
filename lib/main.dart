@@ -60,11 +60,12 @@ void main() async {
     'death_monster1.mp3',
     'death_monster3.mp3',
     'death_monster3.mp3',
-    'end_game.mp3',
     'round_end.mp3'
   ]);
 
   await BGM.add('game_stoped.mp3');
+  await BGM.add('playing.mp3');
+  await BGM.add('lost.mp3');
 
   SharedPreferences storage = await SharedPreferences.getInstance();
   GameLoop game = GameLoop(storage);

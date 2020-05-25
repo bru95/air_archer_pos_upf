@@ -58,6 +58,6 @@ class Lost {
   }
 
   void start() {
-    BGM.play(0);
+    BGM.play(2, game.soundButton.enable, vol: 0.5);
   }
 }

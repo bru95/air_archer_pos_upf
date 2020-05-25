@@ -1,8 +1,10 @@
 import 'dart:ui';
 
+import 'package:air_archer/BGM.dart';
 import 'package:air_archer/View.dart';
 import 'package:air_archer/components/Background.dart';
 import 'package:air_archer/components/HighScoreDisplay.dart';
+import 'package:air_archer/components/SoundButton.dart';
 import 'package:air_archer/view/Home.dart';
 import 'package:air_archer/view/Lost.dart';
 import 'package:air_archer/view/Playing.dart';
@@ -21,6 +23,7 @@ class GameLoop extends Game {
 
   Background background;
   HighScoreDisplay highScore;
+  SoundButton soundButton;
 
   final SharedPreferences storage;
 
@@ -42,11 +45,11 @@ class GameLoop extends Game {
     score = 0;
 
     background = Background(this);
-
     homeView = Home(this);
     playingView = Playing(this);
     lostView = Lost(this);
     highScore = HighScoreDisplay(this);
+    soundButton = SoundButton(this);
 
     setHomeView();
   }
@@ -89,6 +92,7 @@ class GameLoop extends Game {
     }
 
     highScore.render(canvas);
+    soundButton.render(canvas);
   }
 
 
@@ -105,12 +109,21 @@ class GameLoop extends Game {
   }
 
   void onTapUp(TapUpDetails details){
+    if(soundButton.rect.contains(details.globalPosition)) {
+      if(soundButton.change()) {
+        BGM.resume();
+      } else {
+        BGM.pause();
+      }
+      return;
+    }
+
     if(activeView == View.home || activeView == View.lost) {
       score = 0;
       playingView.start();
       setPlayingView();
     } else {
-      playingView.onTapUp(details);
+      playingView.shoot();
     }
   }
 

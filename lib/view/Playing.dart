@@ -2,17 +2,14 @@ import 'dart:math';
 import 'dart:ui';
 import 'package:air_archer/BGM.dart';
 import 'package:air_archer/GameLoop.dart';
-import 'package:air_archer/View.dart';
 import 'package:air_archer/components/Archer.dart';
 import 'package:air_archer/components/Arrow.dart';
 import 'package:air_archer/components/Bird.dart';
 import 'package:air_archer/components/HardMonster.dart';
-import 'package:air_archer/components/HighScoreDisplay.dart';
 import 'package:air_archer/components/Monster.dart';
 import 'package:air_archer/components/PurpleMonster.dart';
 import 'package:air_archer/components/RedMonster.dart';
 import 'package:air_archer/components/Score.dart';
-import 'package:air_archer/components/SoundButton.dart';
 import 'package:flame/flame.dart';
 import 'package:flutter/gestures.dart';
 
@@ -24,7 +21,6 @@ class Playing {
   List<Monster> monsters;
   List<Bird> birds;
   Score scoreDisplay;
-  SoundButton soundButton;
 
   int maxInterval = 3000;
   int nextSpawn;
@@ -37,7 +33,6 @@ class Playing {
     arrows = List<Arrow>();
     birds = List<Bird>();
     scoreDisplay = Score(game);
-    soundButton = SoundButton(game);
   }
 
   void start() {
@@ -46,11 +41,7 @@ class Playing {
     arrows.clear();
 
     nextSpawn = DateTime.now().millisecondsSinceEpoch + maxInterval;
-    temp();
-  }
-
-  void temp() async {
-    await BGM.stop();
+    BGM.play(1, game.soundButton.enable, vol: 0.25);
   }
 
   void update(double time) {
@@ -65,7 +56,7 @@ class Playing {
 
     monsters.forEach((monster) {
       monster.update(time);
-      if (monster.monsterRect.overlaps(archer.archerRect) && !monster.isDead) {
+      if (monster.monsterRect.overlaps(archer.archerRect) && !monster.isDead && !archer.isDead) {
         endGame();
       }
     });
@@ -81,7 +72,7 @@ class Playing {
           arrow.gone = true;
           bool died = monster.die();
           if(died) {
-            if(soundButton.enable) {
+            if(game.soundButton.enable) {
               Flame.audio.audioCache.play(monster.audio_death, volume: 1.5);
             }
             game.score += 1;
@@ -91,7 +82,7 @@ class Playing {
       });
 
       birds.forEach((bird) {
-        if(arrow.hitRect.overlaps(bird.birdRect)) {
+        if(arrow.hitRect.overlaps(bird.birdRect) && !archer.isDead) {
           arrow.gone = true;
           endGame();
         }
@@ -106,8 +97,8 @@ class Playing {
 
   void endGame() {
     archer.die();
-    if(soundButton.enable) {
-      Flame.audio.audioCache.play('end_game.mp3');
+    if(game.soundButton.enable) {
+      Flame.audio.audioCache.play('round_end.mp3', volume: 0.25);
     }
   }
 
@@ -150,8 +141,6 @@ class Playing {
     });
 
     scoreDisplay.render(canvas);
-
-    soundButton.render(canvas);
   }
 
 
@@ -167,14 +156,6 @@ class Playing {
 
   void stopMoveArcher(DragEndDetails details) {
     archer.stopMove();
-  }
-
-  void onTapUp(TapUpDetails details) {
-    if(soundButton.rect.contains(details.globalPosition)) {
-      soundButton.change();
-    } else {
-      shoot();
-    }
   }
 
   void shoot(){
