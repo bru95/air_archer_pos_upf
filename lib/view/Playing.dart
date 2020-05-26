@@ -11,6 +11,7 @@ import 'package:air_archer/components/Monster.dart';
 import 'package:air_archer/components/PurpleMonster.dart';
 import 'package:air_archer/components/RedMonster.dart';
 import 'package:air_archer/components/Score.dart';
+import 'package:air_archer/controllers/EnemiesController.dart';
 import 'package:flame/flame.dart';
 import 'package:flutter/gestures.dart';
 
@@ -22,10 +23,8 @@ class Playing {
   List<Monster> monsters;
   List<Bird> birds;
   List<Jelly> jellies;
+  EnemiesController enemiesController;
   Score scoreDisplay;
-
-  int maxInterval = 3000;
-  int nextSpawn;
   Random rnd;
 
   Playing(this.game) {
@@ -36,22 +35,17 @@ class Playing {
     birds = List<Bird>();
     jellies = List<Jelly>();
     scoreDisplay = Score(game);
+    enemiesController = EnemiesController(this);
   }
 
   void start() {
     archer.initialize();
-    monsters.clear();
-    arrows.clear();
-    birds.clear();
-    jellies.clear();
-
-    nextSpawn = DateTime.now().millisecondsSinceEpoch + maxInterval;
+    enemiesController.clearAll();
     BGM.play(1, game.soundButton.enable, vol: 0.25);
   }
 
   void update(double time) {
-    //adicionar um monstro
-    addMonster(time);
+    enemiesController.newEnemie(time); //verifica se esta na hora de um novo inimigo e determina qual
 
     //atualiza arqueiro
     archer.update(time);
@@ -60,6 +54,9 @@ class Playing {
     //atualiza passarinhos
     birds.forEach((bird) {
       bird.update(time);
+    });
+    birds.removeWhere((bird) {
+      return bird.gone;
     });
 
     //atualiza as geleias
@@ -112,13 +109,9 @@ class Playing {
           arrow.gone = true;
           bool died = monster.die();
           if(died) {
-            if(game.soundButton.enable) {
-              Flame.audio.audioCache.play(monster.audio_death, volume: 1.5);
-            }
-            game.score += 1;
-            game.updateHighScore();
+            monsterDied(monster);
           } else {
-            jellies.add(Jelly(game, monster.monsterRect.left, monster.monsterRect.top, monster.speed * 2));
+            enemiesController.newJelly(monster.monsterRect.left, monster.monsterRect.top, monster.speed);
           }
         }
       });
@@ -130,34 +123,20 @@ class Playing {
     scoreDisplay.update(time);
   }
 
+  void monsterDied(Monster monster) {
+    if(game.soundButton.enable) {
+      Flame.audio.audioCache.play(monster.audio_death, volume: 1.5);
+    }
+    game.score += 1;
+    game.updateHighScore();
+    enemiesController.updateLevel();
+  }
+
   void endGame() {
     archer.die();
     if(game.soundButton.enable) {
       Flame.audio.audioCache.play('round_end.mp3', volume: 0.25);
     }
-  }
-
-  void addMonster(double time) {
-    int nowTimestamp = DateTime.now().millisecondsSinceEpoch;
-    if (nowTimestamp >= nextSpawn && !archer.gone) {
-      switch(rnd.nextInt(5)) {
-        case(0):
-          monsters.add(RedMonster(game));
-          break;
-        case(1):
-          monsters.add(PurpleMonster(game));
-          break;
-        case(2):
-          monsters.add(HardMonster(game));
-          break;
-        case(3):
-          birds.add(Bird(game));
-          break;
-
-      }
-      nextSpawn = nowTimestamp + maxInterval;
-    }
-
   }
 
   void render(Canvas canvas) {

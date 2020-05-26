@@ -15,7 +15,7 @@ class Home {
                                 game.tileSize * 5,
                                 game.tileSize * 5
     );
-    sprite = Sprite("controllers/home.png");
+    sprite = Sprite("ui/home.png");
   }
 
   void render(Canvas canvas) {

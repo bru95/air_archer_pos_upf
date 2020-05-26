@@ -54,7 +54,7 @@ void main() async {
     'jelly/jelly_3.png',
     'jelly/jelly_4.png',
     'archer/archer_lost.png',
-    'controllers/home.png',
+    'ui/home.png',
     'ui/icon-sound-disabled.png',
     'ui/icon-sound-enabled.png'
   ]);
