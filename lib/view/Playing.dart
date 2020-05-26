@@ -40,7 +40,7 @@ class Playing {
 
   void start() {
     archer.initialize();
-    enemiesController.clearAll();
+    enemiesController.restart();
     BGM.play(1, game.soundButton.enable, vol: 0.25);
   }
 
@@ -111,7 +111,7 @@ class Playing {
           if(died) {
             monsterDied(monster);
           } else {
-            enemiesController.newJelly(monster.monsterRect.left, monster.monsterRect.top, monster.speed);
+            enemiesController.newJelly(monster.jelly, monster.monsterRect.left, monster.monsterRect.top, monster.speed);
           }
         }
       });
@@ -178,6 +178,7 @@ class Playing {
 
   void shoot(){
     if(!archer.moving && !archer.isDead) {
+      //x e y da flecha calculado levando em consideração o inflate
       double x = archer.archerRect.left - archer.deltaInflate;
       double y = archer.archerRect.top - archer.deltaInflate;
       arrows.add(Arrow(game, x, y));

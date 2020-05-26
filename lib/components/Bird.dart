@@ -10,9 +10,8 @@ class Bird {
   Rect birdRect;
   List<Sprite> birdSprites;
   Offset targetLocation;
-
-  double speed;
   double deltaInflate;
+  double speed;
   bool gone = false;
   double spriteIndex = 0;
 
@@ -20,7 +19,11 @@ class Bird {
     double size = game.tileSize * 1.2;
     deltaInflate = size * 0.3;
     double x = (game.tileSize * 2);
-    birdRect = Rect.fromLTWH(x, game.screenSize.height, size - (deltaInflate * 2), size - (deltaInflate * 2));
+    birdRect = Rect.fromLTWH(x,
+                            game.screenSize.height,
+                            size - (deltaInflate * 2),
+                            size - (deltaInflate * 2));
+
     birdSprites = List<Sprite>();
     birdSprites.add(Sprite("bird/bird_1.png"));
     birdSprites.add(Sprite("bird/bird_2.png"));
@@ -44,7 +47,7 @@ class Bird {
     spriteIndex = spriteIndex % birdSprites.length;
 
     double stepDistance = speed * time;
-    Offset toTarget = targetLocation - Offset(birdRect.left, birdRect.top);
+    Offset toTarget = targetLocation - Offset(birdRect.left, birdRect.bottom);
     if (stepDistance < toTarget.distance) {
       Offset stepToTarget = Offset.fromDirection(toTarget.direction, stepDistance);
       birdRect = birdRect.shift(stepToTarget);

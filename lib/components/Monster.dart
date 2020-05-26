@@ -20,11 +20,14 @@ class Monster {
   double spriteIndex = 0;
   bool isDead = false;
   bool gone = false;
+  bool jelly = false;
 
+  //ocupa um tile
   Monster(this.game) {
     Random rnd = Random();
     deltaInflate = game.tileSize * 0.18; //quanto vai ser diminuido do tile para depois ser inflado
     double y = rnd.nextDouble() * (game.screenSize.height - game.tileSize); // coordenada y aleatória
+    //soma-se o deltainflate para que não "saia" dos limites da tela quando renderiza
     monsterRect = Rect.fromLTWH(game.screenSize.width + deltaInflate,
                                 y + deltaInflate,
                                 game.tileSize - (deltaInflate * 2),

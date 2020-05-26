@@ -43,8 +43,9 @@ class Archer {
     gone = false;
 
     double size = game.tileSize * 1.20; //ocupar 20% a mais que o tamanho do tile
-    deltaInflate = size * 0.2;
+    deltaInflate = size * 0.2; //quanto vou inflar para que ocupe o tamanho que eu quero
     double y = (game.screenSize.height / 2) - (size / 2); //iniciar no meio da tela
+    //soma-se o deltainflate para que não "saia"dos limites da tela quando renderiza
     archerRect = Rect.fromLTWH(0 + deltaInflate,
         y + deltaInflate,
         size - (deltaInflate * 2),

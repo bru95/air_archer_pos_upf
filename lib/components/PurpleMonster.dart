@@ -9,6 +9,7 @@ class PurpleMonster extends Monster {
     speed = game.tileSize * 1.5;
     audio_death = 'death_monster2.mp3';
     life = 2; //mais dificil de matar
+    jelly = true; //tem o poder de jogar geleia
 
     angrySprite = List<Sprite>();
     angrySprite.add(Sprite("monster/monster_purple_angry1.png"));

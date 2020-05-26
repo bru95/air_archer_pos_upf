@@ -46,13 +46,21 @@ class EnemiesController {
     playView.jellies.clear();
   }
 
+  void restart() {
+    clearAll();
+    level = 0;
+    idMonster = 1;
+    interval = initInterval;
+    nextSpawn = DateTime.now().millisecondsSinceEpoch + interval;
+  }
+
   void updateLevel() {
     int nextLevel = (playView.game.score / 5).toInt();
     if(nextLevel > level) {
       level = nextLevel;
       idMonster = level < 4 ? level + 1 : 4;
       interval = level < 3 ? initInterval - (level * 500) : interval;
-      maxMonsterOnScreen = level < 2 ? maxMonsterOnScreen : 9;
+      maxMonsterOnScreen = level < 2 ? maxMonsterOnScreen : 7;
     }
   }
 
@@ -66,7 +74,7 @@ class EnemiesController {
 
     int nextMonster = rnd.nextInt(idMonster);
 
-    if (nowTimestamp >= nextSpawn && livingMonster < maxMonsterOnScreen && nextMonster != 3) {
+    if (nowTimestamp >= nextSpawn && (livingMonster < maxMonsterOnScreen || nextMonster == 3)) {
       switch (nextMonster) {
         case(0):
           playView.monsters.add(RedMonster(playView.game));
@@ -85,10 +93,9 @@ class EnemiesController {
     }
   }
 
-  void newJelly(double x, double y, double speed) {
-    if(level >= 4) {
-      speed = level < 6 ? speed * 1.3 : speed * 1.5;
-      playView.jellies.add(Jelly(playView.game, x, y, speed * 1.3));
+  void newJelly(bool ableThrowJelly, double x, double y, double speed) {
+    if(level >= 4 && ableThrowJelly) {
+      playView.jellies.add(Jelly(playView.game, x, y, speed * 1.5));
     }
   }
 }

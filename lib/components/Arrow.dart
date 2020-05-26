@@ -16,6 +16,7 @@ class Arrow {
   Arrow(this.game, double x, double y) {
     double size = game.tileSize * 1.20;
     arrowRect = Rect.fromLTWH(x, y, size, size);
+    //criei um rect auxiliar que é o retangulo de contato da flecha com demais componentes
     hitRect = Rect.fromLTWH(arrowRect.left + (arrowRect.height * 0.5),
                             arrowRect.top + (arrowRect.height * 0.36),
                             arrowRect.width * 0.5,
