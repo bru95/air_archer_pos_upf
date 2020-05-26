@@ -39,6 +39,7 @@ flutter:
     - assets/images/controllers/
     - assets/images/bird/
     - assets/images/ui/
+    - assets/images/jelly/
     - assets/audio/
 
   fonts:

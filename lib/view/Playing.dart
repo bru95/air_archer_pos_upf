@@ -6,6 +6,7 @@ import 'package:air_archer/components/Archer.dart';
 import 'package:air_archer/components/Arrow.dart';
 import 'package:air_archer/components/Bird.dart';
 import 'package:air_archer/components/HardMonster.dart';
+import 'package:air_archer/components/Jelly.dart';
 import 'package:air_archer/components/Monster.dart';
 import 'package:air_archer/components/PurpleMonster.dart';
 import 'package:air_archer/components/RedMonster.dart';
@@ -20,6 +21,7 @@ class Playing {
   List<Arrow> arrows;
   List<Monster> monsters;
   List<Bird> birds;
+  List<Jelly> jellies;
   Score scoreDisplay;
 
   int maxInterval = 3000;
@@ -32,6 +34,7 @@ class Playing {
     monsters = List<Monster>();
     arrows = List<Arrow>();
     birds = List<Bird>();
+    jellies = List<Jelly>();
     scoreDisplay = Score(game);
   }
 
@@ -39,23 +42,50 @@ class Playing {
     archer.initialize();
     monsters.clear();
     arrows.clear();
+    birds.clear();
+    jellies.clear();
 
     nextSpawn = DateTime.now().millisecondsSinceEpoch + maxInterval;
     BGM.play(1, game.soundButton.enable, vol: 0.25);
   }
 
   void update(double time) {
+    //adicionar um monstro
     addMonster(time);
 
+    //atualiza arqueiro
     archer.update(time);
-    if (archer.gone) game.setLostView();
+    if (archer.gone) game.setLostView(); //se archeiro parou de cair, mostra view lost
 
+    //atualiza passarinhos
     birds.forEach((bird) {
       bird.update(time);
     });
 
+    //atualiza as geleias
+    jellies.forEach((jelly) {
+      jelly.update(time);
+
+      //se alguma geleia acertar o arqueiro, acaba o jogo
+      if (jelly.jellyRect.overlaps(archer.archerRect) && !archer.isDead) {
+        endGame();
+      }
+
+      //se alguma geleia acertar uma flecha, flecha some
+      arrows.forEach((arrow) {
+        if(jelly.jellyRect.overlaps(arrow.hitRect) && !arrow.gone) {
+          arrow.gone = true;
+        }
+      });
+    });
+    jellies.removeWhere((jelly) {
+      return jelly.gone;
+    });
+
+    //atualiza os monstros
     monsters.forEach((monster) {
       monster.update(time);
+      //se algum monstro acertar arqueiro acaba o jogo
       if (monster.monsterRect.overlaps(archer.archerRect) && !monster.isDead && !archer.isDead) {
         endGame();
       }
@@ -64,9 +94,19 @@ class Playing {
       return monster.gone;
     });
 
+    //atualiza as flechas
     arrows.forEach((arrow) {
       arrow.update(time);
 
+      //se a flecha acertar algum passarinho acaba o jogo
+      birds.forEach((bird) {
+        if(arrow.hitRect.overlaps(bird.birdRect) && !archer.isDead) {
+          arrow.gone = true;
+          endGame();
+        }
+      });
+
+      //se a flecha acertar um monstro diminui uma vida
       monsters.forEach((monster) {
         if (arrow.hitRect.overlaps(monster.monsterRect) && !monster.isDead) {
           arrow.gone = true;
@@ -77,14 +117,9 @@ class Playing {
             }
             game.score += 1;
             game.updateHighScore();
+          } else {
+            jellies.add(Jelly(game, monster.monsterRect.left, monster.monsterRect.top, monster.speed * 2));
           }
-        }
-      });
-
-      birds.forEach((bird) {
-        if(arrow.hitRect.overlaps(bird.birdRect) && !archer.isDead) {
-          arrow.gone = true;
-          endGame();
         }
       });
     });
@@ -138,6 +173,10 @@ class Playing {
 
     monsters.forEach((monster) {
       monster.render(canvas);
+    });
+
+    jellies.forEach((jelly) {
+      jelly.render(canvas);
     });
 
     scoreDisplay.render(canvas);
