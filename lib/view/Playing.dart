@@ -44,57 +44,46 @@ class Playing {
   }
 
   void update(double time) {
-    enemiesController.newEnemie(time); //verifica se esta na hora de um novo inimigo e determina qual
-
     //atualiza arqueiro
     archer.update(time);
     if (archer.gone) game.setLostView(); //se archeiro parou de cair, mostra view lost
 
-    //atualiza passarinhos
-    birds.forEach((bird) {
-      bird.update(time);
+    //verifica se esta na hora de um novo inimigo e determina qual
+    enemiesController.newEnemy(time);
+
+    //tira da lista (tela) tudo o que ja sumiu
+    arrows.removeWhere((arrow) {
+      return arrow.gone;
+    });
+    jellies.removeWhere((jelly) {
+      return jelly.gone;
+    });
+    monsters.removeWhere((monster) {
+      return monster.gone;
     });
     birds.removeWhere((bird) {
       return bird.gone;
     });
 
-    //atualiza as geleias
-    jellies.forEach((jelly) {
-      jelly.update(time);
-
-      //se alguma geleia acertar o arqueiro, acaba o jogo
-      if (jelly.jellyRect.overlaps(archer.archerRect) && !archer.isDead) {
-        endGame();
-      }
-
-      //se alguma geleia acertar uma flecha, flecha some
-      arrows.forEach((arrow) {
-        if(jelly.jellyRect.overlaps(arrow.hitRect) && !arrow.gone) {
-          arrow.gone = true;
-        }
-      });
-    });
-    jellies.removeWhere((jelly) {
-      return jelly.gone;
+    //atualiza passarinhos
+    birds.forEach((bird) {
+      bird.update(time);
     });
 
-    //atualiza os monstros
+    //atualiza monstros
     monsters.forEach((monster) {
       monster.update(time);
-      //se algum monstro acertar arqueiro acaba o jogo
+
+      //se monstro atingir arqueiro acaba jogo
       if (monster.monsterRect.overlaps(archer.archerRect) && !monster.isDead && !archer.isDead) {
         endGame();
       }
     });
-    monsters.removeWhere((monster) {
-      return monster.gone;
-    });
 
-    //atualiza as flechas
+    //atualiza flechas
     arrows.forEach((arrow) {
       arrow.update(time);
 
-      //se a flecha acertar algum passarinho acaba o jogo
       birds.forEach((bird) {
         if(arrow.hitRect.overlaps(bird.birdRect) && !archer.isDead) {
           arrow.gone = true;
@@ -102,21 +91,38 @@ class Playing {
         }
       });
 
-      //se a flecha acertar um monstro diminui uma vida
+      //se a flecha atingir alguma geleia, flecha some
+      jellies.forEach((jelly) {
+        if(jelly.jellyRect.overlaps(arrow.hitRect) && !arrow.gone) {
+          arrow.gone = true;
+        }
+      });
+
+      //se flecha atingir algum monstro, mostro perde uma vida
       monsters.forEach((monster) {
-        if (arrow.hitRect.overlaps(monster.monsterRect) && !monster.isDead) {
+        if (arrow.hitRect.overlaps(monster.monsterRect) && !monster.isDead && !arrow.gone) {
           arrow.gone = true;
           bool died = monster.die();
           if(died) {
             monsterDied(monster);
           } else {
-            enemiesController.newJelly(monster.jelly, monster.monsterRect.left, monster.monsterRect.top, monster.speed);
+            enemiesController.newJelly(monster.jelly,
+                                      monster.monsterRect.left - monster.deltaInflate,
+                                      monster.monsterRect.top - monster.deltaInflate,
+                                      monster.speed);
           }
         }
       });
     });
-    arrows.removeWhere((arrow) {
-      return arrow.gone;
+
+    //atualiza geleias
+    jellies.forEach((jelly) {
+      jelly.update(time);
+
+      //se geleia acertar arqueiro, acaba jogo
+      if (jelly.jellyRect.overlaps(archer.archerRect) && !archer.isDead) {
+        endGame();
+      }
     });
 
     scoreDisplay.update(time);
@@ -149,12 +155,12 @@ class Playing {
       bird.render(canvas);
     });
 
-    monsters.forEach((monster) {
-      monster.render(canvas);
-    });
-
     jellies.forEach((jelly) {
       jelly.render(canvas);
+    });
+
+    monsters.forEach((monster) {
+      monster.render(canvas);
     });
 
     scoreDisplay.render(canvas);

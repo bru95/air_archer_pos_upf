@@ -13,8 +13,8 @@ class Jelly {
   double spriteIndex = 0;
 
   Jelly(double x, double y, this.speed) {
-    double size = GameValues.tileSize / 2; //ocupa meio tile
-    deltaInflate = size * 0.3;
+    double size = GameValues.tileSize; //ocupa meio tile
+    deltaInflate = size * 0.18;
     jellyRect = Rect.fromLTWH(x + deltaInflate,
                               y + deltaInflate,
                               size - (deltaInflate * 2),

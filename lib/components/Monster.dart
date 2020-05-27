@@ -81,8 +81,9 @@ class Monster {
       }
     } else {
       spriteIndex += 10 * time;
-      spriteIndex = spriteIndex % (deadSprite.length + 1);
+      spriteIndex = spriteIndex % (deadSprite.length + 1); //gerar um indice a mais para saber se ja acabou o efeito de morte
       if(spriteIndex >= deadSprite.length) {
+        spriteIndex -= 1;
         gone = true;
       }
     }
