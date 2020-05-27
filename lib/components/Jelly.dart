@@ -1,10 +1,8 @@
 import 'dart:ui';
-import 'package:air_archer/GameLoop.dart';
+import 'package:air_archer/controllers/GameValues.dart';
 import 'package:flame/sprite.dart';
 
 class Jelly {
-
-  final GameLoop game;
 
   Rect jellyRect;
   List<Sprite> jellySprites;
@@ -14,8 +12,8 @@ class Jelly {
   bool gone = false;
   double spriteIndex = 0;
 
-  Jelly(this.game, double x, double y, this.speed) {
-    double size = game.tileSize / 2; //ocupa meio tile
+  Jelly(double x, double y, this.speed) {
+    double size = GameValues.tileSize / 2; //ocupa meio tile
     deltaInflate = size * 0.3;
     jellyRect = Rect.fromLTWH(x + deltaInflate,
                               y + deltaInflate,

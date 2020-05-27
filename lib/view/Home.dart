@@ -1,19 +1,18 @@
 import 'dart:ui';
 import 'package:air_archer/BGM.dart';
 import 'package:air_archer/GameLoop.dart';
+import 'package:air_archer/controllers/GameValues.dart';
 import 'package:flame/sprite.dart';
 
 class Home {
-  final GameLoop game;
-
   Sprite sprite;
   Rect rect;
 
-  Home(this.game) {
-    rect = Rect.fromLTWH((game.screenSize.width / 2) - game.tileSize * 2.5,
+  Home() {
+    rect = Rect.fromLTWH((GameValues.screenSize.width / 2) - GameValues.tileSize * 2.5,
                                 0,
-                                game.tileSize * 5,
-                                game.tileSize * 5
+                                GameValues.tileSize * 5,
+                                GameValues.tileSize * 5
     );
     sprite = Sprite("ui/home.png");
   }
@@ -23,6 +22,6 @@ class Home {
   }
 
   void start() {
-    BGM.play(0, game.soundButton.enable, vol: 0.5);
+    BGM.play(0, vol: 0.5);
   }
 }

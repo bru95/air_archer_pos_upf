@@ -1,38 +1,41 @@
 import 'dart:ui';
-import 'package:air_archer/GameLoop.dart';
+import 'package:air_archer/BGM.dart';
+import 'package:air_archer/controllers/GameValues.dart';
 import 'package:flame/sprite.dart';
 
 class SoundButton {
 
-  final GameLoop game;
-
   Rect rect;
   Sprite spriteEnable;
   Sprite spriteDisable;
-  bool enable = true;
 
-  SoundButton(this.game) {
+  SoundButton() {
     rect = Rect.fromLTWH(
-      (game.screenSize.width / 2) - (game.tileSize / 2),
+      (GameValues.screenSize.width / 2) - (GameValues.tileSize / 2),
       0,
-      game.tileSize / 2,
-      game.tileSize / 2,
+      GameValues.tileSize / 2,
+      GameValues.tileSize / 2,
     );
     spriteEnable = Sprite('ui/icon-sound-enabled.png');
     spriteDisable = Sprite('ui/icon-sound-disabled.png');
   }
 
   void render(Canvas canvas) {
-    if (enable) {
+    if (GameValues.get_soundEnabled()) {
       spriteEnable.renderRect(canvas, rect);
     } else {
       spriteDisable.renderRect(canvas, rect);
     }
   }
 
-  bool change() {
-    enable = !enable;
-    return enable;
+  void change() {
+    bool sound = !GameValues.get_soundEnabled();
+    GameValues.set_soundEnabled(sound);
+    if(sound) {
+      BGM.resumeMusic();
+    } else {
+      BGM.pauseMusic();
+    }
   }
 
 }

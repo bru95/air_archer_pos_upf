@@ -5,13 +5,12 @@ import 'package:air_archer/GameLoop.dart';
 import 'package:air_archer/components/Archer.dart';
 import 'package:air_archer/components/Arrow.dart';
 import 'package:air_archer/components/Bird.dart';
-import 'package:air_archer/components/HardMonster.dart';
 import 'package:air_archer/components/Jelly.dart';
 import 'package:air_archer/components/Monster.dart';
-import 'package:air_archer/components/PurpleMonster.dart';
-import 'package:air_archer/components/RedMonster.dart';
 import 'package:air_archer/components/Score.dart';
+import 'package:air_archer/components/SoundButton.dart';
 import 'package:air_archer/controllers/EnemiesController.dart';
+import 'package:air_archer/controllers/GameValues.dart';
 import 'package:flame/flame.dart';
 import 'package:flutter/gestures.dart';
 
@@ -29,19 +28,19 @@ class Playing {
 
   Playing(this.game) {
     rnd = Random();
-    archer = Archer(game);
+    archer = Archer();
     monsters = List<Monster>();
     arrows = List<Arrow>();
     birds = List<Bird>();
     jellies = List<Jelly>();
-    scoreDisplay = Score(game);
+    scoreDisplay = Score();
     enemiesController = EnemiesController(this);
   }
 
   void start() {
     archer.initialize();
     enemiesController.restart();
-    BGM.play(1, game.soundButton.enable, vol: 0.25);
+    BGM.play(1, vol: 0.25);
   }
 
   void update(double time) {
@@ -124,17 +123,17 @@ class Playing {
   }
 
   void monsterDied(Monster monster) {
-    if(game.soundButton.enable) {
+    if(GameValues.get_soundEnabled()) {
       Flame.audio.audioCache.play(monster.audio_death, volume: 1.5);
     }
-    game.score += 1;
+    GameValues.gameScore += 1;
     game.updateHighScore();
     enemiesController.updateLevel();
   }
 
   void endGame() {
     archer.die();
-    if(game.soundButton.enable) {
+    if(GameValues.get_soundEnabled()) {
       Flame.audio.audioCache.play('round_end.mp3', volume: 0.25);
     }
   }
@@ -181,7 +180,7 @@ class Playing {
       //x e y da flecha calculado levando em consideração o inflate
       double x = archer.archerRect.left - archer.deltaInflate;
       double y = archer.archerRect.top - archer.deltaInflate;
-      arrows.add(Arrow(game, x, y));
+      arrows.add(Arrow(x, y));
     }
   }
 }

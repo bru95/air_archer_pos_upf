@@ -1,15 +1,14 @@
 import 'dart:ui';
-import 'package:air_archer/GameLoop.dart';
+import 'package:air_archer/controllers/GameValues.dart';
 import 'package:flutter/painting.dart';
 
 class HighScoreDisplay {
 
-  final GameLoop game;
   TextPainter painter;
   TextStyle textStyle;
   Offset position;
 
-  HighScoreDisplay(this.game) {
+  HighScoreDisplay() {
     painter = TextPainter(
       textAlign: TextAlign.left,
       textDirection: TextDirection.ltr,
@@ -39,7 +38,7 @@ class HighScoreDisplay {
   }
 
   void update() {
-    int highscore = game.storage.getInt('highscore') ?? 0;
+    int highscore = GameValues.storage.getInt('highscore') ?? 0;
 
     painter.text = TextSpan(
       text: 'High-score: ' + highscore.toString(),
@@ -48,6 +47,6 @@ class HighScoreDisplay {
 
     painter.layout();
 
-    position = Offset(game.screenSize.width - (painter.width), 0);
+    position = Offset(GameValues.screenSize.width - (painter.width), 0);
   }
 }

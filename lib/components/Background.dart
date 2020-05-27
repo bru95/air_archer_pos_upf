@@ -1,20 +1,19 @@
 import 'dart:ui';
-import 'package:air_archer/GameLoop.dart';
+import 'package:air_archer/controllers/GameValues.dart';
 import 'package:flame/sprite.dart';
 
 class Background {
 
-  final GameLoop game;
   Sprite bgSprite;
   Rect bgRect;
 
-  Background(this.game) {
+  Background() {
     bgSprite = Sprite("background/bg.png");
     bgRect = Rect.fromLTWH(
       0,
       0,
-      game.tileSize * 17,
-      game.tileSize * 5,
+      GameValues.tileSize * 17,
+      GameValues.tileSize * 5,
     );
   }
 

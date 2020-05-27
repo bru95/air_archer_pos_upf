@@ -5,58 +5,48 @@ import 'package:air_archer/View.dart';
 import 'package:air_archer/components/Background.dart';
 import 'package:air_archer/components/HighScoreDisplay.dart';
 import 'package:air_archer/components/SoundButton.dart';
+import 'package:air_archer/controllers/GameValues.dart';
 import 'package:air_archer/view/Home.dart';
 import 'package:air_archer/view/Lost.dart';
 import 'package:air_archer/view/Playing.dart';
 import 'package:flame/game.dart';
 import 'package:flame/flame.dart';
 import 'package:flutter/gestures.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 
 class GameLoop extends Game {
 
   View activeView;
 
-  Size screenSize;
-  double tileSize;
-
   Background background;
   HighScoreDisplay highScore;
   SoundButton soundButton;
-
-  final SharedPreferences storage;
 
   //VIEWS
   Home homeView;
   Playing playingView;
   Lost lostView;
 
-  int score;
-
-
-  GameLoop(this.storage) {
+  GameLoop() {
     initialize();
   }
 
   void initialize() async{
     resize(await Flame.util.initialDimensions());
 
-    score = 0;
-
-    background = Background(this);
-    homeView = Home(this);
+    background = Background();
+    homeView = Home();
     playingView = Playing(this);
-    lostView = Lost(this);
-    highScore = HighScoreDisplay(this);
-    soundButton = SoundButton(this);
+    lostView = Lost();
+    highScore = HighScoreDisplay();
+    soundButton = SoundButton();
 
     setHomeView();
   }
 
   void resize(Size size) {
-    screenSize = size;
-    tileSize = screenSize.height / 5;
+    GameValues.screenSize = size;
+    GameValues.tileSize = GameValues.screenSize.height / 5;
   }
 
   void setHomeView() {
@@ -66,6 +56,8 @@ class GameLoop extends Game {
 
   void setPlayingView() {
     activeView = View.playing;
+    GameValues.restartGameValues();
+    playingView.start();
   }
 
   void setLostView() {
@@ -110,17 +102,11 @@ class GameLoop extends Game {
 
   void onTapUp(TapUpDetails details){
     if(soundButton.rect.contains(details.globalPosition)) {
-      if(soundButton.change()) {
-        BGM.resume();
-      } else {
-        BGM.pause();
-      }
+      soundButton.change();
       return;
     }
 
     if(activeView == View.home || activeView == View.lost) {
-      score = 0;
-      playingView.start();
       setPlayingView();
     } else {
       playingView.shoot();
@@ -128,8 +114,8 @@ class GameLoop extends Game {
   }
 
   void updateHighScore() {
-    if (score > (storage.getInt('highscore') ?? 0)) {
-      storage.setInt('highscore', score);
+    if (GameValues.gameScore > (GameValues.storage.getInt('highscore') ?? 0)) {
+      GameValues.storage.setInt('highscore', GameValues.gameScore);
       highScore.update();
     }
   }

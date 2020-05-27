@@ -1,13 +1,14 @@
 
 import 'package:air_archer/components/Monster.dart';
 import 'package:air_archer/GameLoop.dart';
+import 'package:air_archer/controllers/GameValues.dart';
 import 'package:flame/sprite.dart';
 
 
 class HardMonster extends Monster {
 
-  HardMonster (GameLoop game) : super(game) {
-    speed = game.tileSize * 2.5;
+  HardMonster () : super() {
+    speed = GameValues.tileSize * 2.5;
     audio_death = 'death_monster3.mp3';
     life = 2; //mais dificil de matar
 

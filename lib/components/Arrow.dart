@@ -1,10 +1,8 @@
 import 'dart:ui';
-import 'package:air_archer/GameLoop.dart';
+import 'package:air_archer/controllers/GameValues.dart';
 import 'package:flame/sprite.dart';
 
 class Arrow {
-
-  final GameLoop game;
 
   Rect arrowRect;
   Rect hitRect;
@@ -13,8 +11,8 @@ class Arrow {
   double speed; //quanto a flecha anda em 1 segundo
   bool gone = false;
 
-  Arrow(this.game, double x, double y) {
-    double size = game.tileSize * 1.20;
+  Arrow(double x, double y) {
+    double size = GameValues.tileSize * 1.20;
     arrowRect = Rect.fromLTWH(x, y, size, size);
     //criei um rect auxiliar que é o retangulo de contato da flecha com demais componentes
     hitRect = Rect.fromLTWH(arrowRect.left + (arrowRect.height * 0.5),
@@ -22,7 +20,7 @@ class Arrow {
                             arrowRect.width * 0.5,
                             arrowRect.height * 0.15);
     arrow = Sprite("arrow/arrow.png");
-    speed = game.tileSize * 4;
+    speed = GameValues.tileSize * 4;
   }
 
   void render(Canvas canvas) {
@@ -33,7 +31,7 @@ class Arrow {
 
   void update(double time) {
     double stepDistance = speed * time;
-    Offset targetLocation = Offset(game.screenSize.width, arrowRect.top);
+    Offset targetLocation = Offset(GameValues.screenSize.width, arrowRect.top);
     Offset toTarget = targetLocation - Offset(arrowRect.left, arrowRect.top);
     if (stepDistance < toTarget.distance) {
       Offset stepToTarget = Offset.fromDirection(toTarget.direction, stepDistance);

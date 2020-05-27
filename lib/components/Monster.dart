@@ -1,12 +1,9 @@
 import 'dart:math';
 import 'dart:ui';
-import 'package:air_archer/GameLoop.dart';
-import 'package:flame/flame.dart';
+import 'package:air_archer/controllers/GameValues.dart';
 import 'package:flame/sprite.dart';
 
 class Monster {
-
-  final GameLoop game;
 
   Rect monsterRect;
   double deltaInflate;
@@ -23,15 +20,15 @@ class Monster {
   bool jelly = false;
 
   //ocupa um tile
-  Monster(this.game) {
+  Monster() {
     Random rnd = Random();
-    deltaInflate = game.tileSize * 0.18; //quanto vai ser diminuido do tile para depois ser inflado
-    double y = rnd.nextDouble() * (game.screenSize.height - game.tileSize); // coordenada y aleatória
+    deltaInflate = GameValues.tileSize * 0.18; //quanto vai ser diminuido do tile para depois ser inflado
+    double y = rnd.nextDouble() * (GameValues.screenSize.height - GameValues.tileSize); // coordenada y aleatória
     //soma-se o deltainflate para que não "saia" dos limites da tela quando renderiza
-    monsterRect = Rect.fromLTWH(game.screenSize.width + deltaInflate,
+    monsterRect = Rect.fromLTWH(GameValues.screenSize.width + deltaInflate,
                                 y + deltaInflate,
-                                game.tileSize - (deltaInflate * 2),
-                                game.tileSize - (deltaInflate * 2));
+                                GameValues.tileSize - (deltaInflate * 2),
+                                GameValues.tileSize - (deltaInflate * 2));
 
     deadSprite = List<Sprite>();
     deadSprite.add(Sprite("dead_effect/dead_1.png"));
@@ -43,7 +40,7 @@ class Monster {
   }
 
   void restartPosition() {
-    monsterRect = monsterRect.shift(Offset(game.screenSize.width, 0));
+    monsterRect = monsterRect.shift(Offset(GameValues.screenSize.width, 0));
   }
 
   void render(Canvas canvas) {

@@ -5,6 +5,7 @@ import 'package:air_archer/components/HardMonster.dart';
 import 'package:air_archer/components/Jelly.dart';
 import 'package:air_archer/components/PurpleMonster.dart';
 import 'package:air_archer/components/RedMonster.dart';
+import 'package:air_archer/controllers/GameValues.dart';
 import 'package:air_archer/view/Playing.dart';
 
 /**
@@ -55,7 +56,7 @@ class EnemiesController {
   }
 
   void updateLevel() {
-    int nextLevel = (playView.game.score / 5).toInt();
+    int nextLevel = (GameValues.gameScore / 5).toInt();
     if(nextLevel > level) {
       level = nextLevel;
       idMonster = level < 4 ? level + 1 : 4;
@@ -77,16 +78,16 @@ class EnemiesController {
     if (nowTimestamp >= nextSpawn && (livingMonster < maxMonsterOnScreen || nextMonster == 3)) {
       switch (nextMonster) {
         case(0):
-          playView.monsters.add(RedMonster(playView.game));
+          playView.monsters.add(RedMonster());
           break;
         case(1):
-          playView.monsters.add(PurpleMonster(playView.game));
+          playView.monsters.add(PurpleMonster());
           break;
         case(2):
-          playView.monsters.add(HardMonster(playView.game));
+          playView.monsters.add(HardMonster());
           break;
         case(3):
-          playView.birds.add(Bird(playView.game));
+          playView.birds.add(Bird());
           break;
       }
       nextSpawn = nowTimestamp + interval;
@@ -95,7 +96,7 @@ class EnemiesController {
 
   void newJelly(bool ableThrowJelly, double x, double y, double speed) {
     if(level >= 4 && ableThrowJelly) {
-      playView.jellies.add(Jelly(playView.game, x, y, speed * 1.5));
+      playView.jellies.add(Jelly( x, y, speed * 1.5));
     }
   }
 }

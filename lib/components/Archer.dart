@@ -1,10 +1,8 @@
 import 'dart:ui';
-import 'package:air_archer/GameLoop.dart';
+import 'package:air_archer/controllers/GameValues.dart';
 import 'package:flame/sprite.dart';
 
 class Archer {
-
-  final GameLoop game;
 
   Rect archerRect;
   double deltaInflate;
@@ -18,7 +16,7 @@ class Archer {
   bool isDead;
   bool gone;
 
-  Archer(this.game) {
+  Archer() {
     initialize();
 
     shootingSprite = Sprite("archer/archer_shooting.png");
@@ -42,9 +40,9 @@ class Archer {
     isDead = false;
     gone = false;
 
-    double size = game.tileSize * 1.20; //ocupar 20% a mais que o tamanho do tile
+    double size = GameValues.tileSize * 1.20; //ocupar 20% a mais que o tamanho do tile
     deltaInflate = size * 0.2; //quanto vou inflar para que ocupe o tamanho que eu quero
-    double y = (game.screenSize.height / 2) - (size / 2); //iniciar no meio da tela
+    double y = (GameValues.screenSize.height / 2) - (size / 2); //iniciar no meio da tela
     //soma-se o deltainflate para que não "saia"dos limites da tela quando renderiza
     archerRect = Rect.fromLTWH(0 + deltaInflate,
         y + deltaInflate,
@@ -76,8 +74,8 @@ class Archer {
       }
     } else {
       if(spriteIndex.toInt() >= 3) { //começa a cair
-        double stepDistance = game.tileSize * time;
-        Offset targetLocation = Offset(archerRect.left + deltaInflate, game.screenSize.height);
+        double stepDistance = GameValues.tileSize * time;
+        Offset targetLocation = Offset(archerRect.left + deltaInflate, GameValues.screenSize.height);
         Offset toTarget = targetLocation - Offset(archerRect.left + deltaInflate, archerRect.bottom + deltaInflate);
         if (stepDistance < toTarget.distance) {
           Offset stepToTarget = Offset.fromDirection(toTarget.direction, stepDistance);
@@ -110,7 +108,7 @@ class Archer {
       }
     } else if(delta.direction > 0) { //movendo pra baixo
       Offset target = Offset(archerRect.left, archerRect.bottom + deltaInflate) + delta;
-      if(target.dy <= game.screenSize.height) { //dentro da tela
+      if(target.dy <= GameValues.screenSize.height) { //dentro da tela
         archerRect = archerRect.shift(delta);
       }
     }

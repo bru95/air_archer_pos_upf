@@ -1,11 +1,10 @@
 import 'dart:ui';
 import 'package:air_archer/BGM.dart';
-import 'package:air_archer/GameLoop.dart';
+import 'package:air_archer/controllers/GameValues.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/painting.dart';
 
 class Lost {
-  final GameLoop game;
 
   TextPainter painter;
   TextStyle textStyle;
@@ -14,12 +13,12 @@ class Lost {
   Rect archerLostRect;
   Sprite archerLost;
 
-  Lost(this.game) {
+  Lost() {
     archerLost = Sprite("archer/archer_lost.png");
-    archerLostRect = Rect.fromLTWH((game.screenSize.width / 2) - game.tileSize,
-                                    game.screenSize.height - (game.tileSize * 2),
-                                    game.tileSize * 2,
-                                    game.tileSize * 2);
+    archerLostRect = Rect.fromLTWH((GameValues.screenSize.width / 2) - GameValues.tileSize,
+                                    GameValues.screenSize.height - (GameValues.tileSize * 2),
+                                    GameValues.tileSize * 2,
+                                    GameValues.tileSize * 2);
 
     painter = TextPainter(
       textAlign: TextAlign.center,
@@ -47,8 +46,8 @@ class Lost {
     painter.layout();
 
     position = Offset(
-      (game.screenSize.width / 2) - (painter.width / 2),
-      (game.screenSize.height * .25) - (painter.height / 2),
+      (GameValues.screenSize.width / 2) - (painter.width / 2),
+      (GameValues.screenSize.height * .25) - (painter.height / 2),
     );
   }
 
@@ -58,6 +57,6 @@ class Lost {
   }
 
   void start() {
-    BGM.play(2, game.soundButton.enable, vol: 0.5);
+    BGM.play(2, vol: 0.5);
   }
 }

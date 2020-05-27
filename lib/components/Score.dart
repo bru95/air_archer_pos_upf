@@ -1,16 +1,14 @@
 import 'dart:ui';
-import 'package:air_archer/GameLoop.dart';
+import 'package:air_archer/controllers/GameValues.dart';
 import 'package:flutter/painting.dart';
 
 class Score {
-
-  final GameLoop game;
 
   TextPainter painter;
   TextStyle textStyle;
   Offset position;
 
-  Score(this.game) {
+  Score() {
     painter = TextPainter(
       textAlign: TextAlign.left,
       textDirection: TextDirection.ltr,
@@ -37,9 +35,9 @@ class Score {
   }
 
   void update(double t) {
-    if ((painter.text?.text ?? '') != game.score.toString()) {
+    if ((painter.text?.text ?? '') != GameValues.gameScore.toString()) {
       painter.text = TextSpan(
-        text: " Score: ${game.score.toString()}",
+        text: " Score: ${GameValues.gameScore.toString()}",
         style: textStyle,
       );
 

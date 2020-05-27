@@ -1,11 +1,8 @@
-import 'dart:math';
 import 'dart:ui';
-import 'package:air_archer/GameLoop.dart';
+import 'package:air_archer/controllers/GameValues.dart';
 import 'package:flame/sprite.dart';
 
 class Bird {
-
-  final GameLoop game;
 
   Rect birdRect;
   List<Sprite> birdSprites;
@@ -15,12 +12,12 @@ class Bird {
   bool gone = false;
   double spriteIndex = 0;
 
-  Bird(this.game) {
-    double size = game.tileSize * 1.2;
+  Bird() {
+    double size = GameValues.tileSize * 1.2;
     deltaInflate = size * 0.3;
-    double x = (game.tileSize * 2);
+    double x = (GameValues.tileSize * 2);
     birdRect = Rect.fromLTWH(x,
-                            game.screenSize.height,
+                            GameValues.screenSize.height,
                             size - (deltaInflate * 2),
                             size - (deltaInflate * 2));
 
@@ -31,9 +28,9 @@ class Bird {
     birdSprites.add(Sprite("bird/bird_4.png"));
     birdSprites.add(Sprite("bird/bird_5.png"));
     birdSprites.add(Sprite("bird/bird_6.png"));
-    speed = game.tileSize * 1.5;
+    speed = GameValues.tileSize * 1.5;
 
-    targetLocation = Offset(game.screenSize.width, 0);
+    targetLocation = Offset(GameValues.screenSize.width, 0);
   }
 
   void render(Canvas canvas) {

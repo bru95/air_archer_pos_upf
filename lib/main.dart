@@ -1,5 +1,6 @@
 import 'package:air_archer/BGM.dart';
 import 'package:air_archer/GameLoop.dart';
+import 'package:air_archer/controllers/GameValues.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/util.dart';
 import 'package:flutter/services.dart';
@@ -72,7 +73,8 @@ void main() async {
   await BGM.add('lost.mp3');
 
   SharedPreferences storage = await SharedPreferences.getInstance();
-  GameLoop game = GameLoop(storage);
+  GameValues.setStorage(storage);
+  GameLoop game = GameLoop();
 
   runApp(game.widget);
 
